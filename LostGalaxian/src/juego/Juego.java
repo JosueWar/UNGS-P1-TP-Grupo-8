@@ -104,7 +104,7 @@ public class Juego extends InterfaceJuego {
 		//Entorno
 		nave.dibujarse(entorno);
 
-		entorno.cambiarFont("Arial", 18, Color.white);
+		entorno.cambiarFont("Arial", 20, Color.white);
 		entorno.escribirTexto("El angulo es: " + nave.angulo, 500, 100);
 		entorno.escribirTexto("posicion en x:" + nave.x, 500, 150);
 		entorno.escribirTexto("posicion en y:" + nave.y, 500, 200);
