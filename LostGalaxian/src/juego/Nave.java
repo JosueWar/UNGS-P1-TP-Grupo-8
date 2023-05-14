@@ -20,14 +20,14 @@ public class Nave
 		this.x = x;
 		this.y = y;
 	
-		img1 = Herramientas.cargarImagen("rsH6n.png");
-		img2 = Herramientas.cargarImagen("rsH6n.png");
+		img1 = Herramientas.cargarImagen("nave.png");
+		img2 = Herramientas.cargarImagen("nave.png");
 	}
 	
 	public void dibujarse(Entorno entorno)
 	{
 //		entorno.dibujarTriangulo(this.x, this.y, 50, 30, this.angulo, Color.yellow);
-	
+		//Cambiar para izq y der nave
 		if (entorno.estaPresionada(entorno.TECLA_ARRIBA))
 			entorno.dibujarImagen(img1, this.x, this.y, this.angulo, 0.2);
 		else
