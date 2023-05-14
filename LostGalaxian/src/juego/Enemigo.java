@@ -30,9 +30,12 @@ public class Enemigo {
 	public void mover() {
 		this.x =this.x + this.velocidad * Math.cos(angulo);
 		this.y =this.y + this.velocidad * Math.sin(angulo) * 0.1;
+		
+		//Cambia de angulo si toca el borde de la pantalla
 		if(Math.random() > 0.995 || Detector.tocarBorde(this.x,this.y,this.e)) {
 		   cambiarAngulo();
 		}
+		
 	}
 
 	public void cambiarAngulo() {

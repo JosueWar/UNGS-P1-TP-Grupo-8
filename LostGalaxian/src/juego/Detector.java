@@ -8,6 +8,9 @@ public class Detector {
 	public static boolean tocarBorde(double x, double y, Entorno e) {
     	return x <10 || x > e.ancho()-10;
     }
+	public static boolean colisiona(double x1, double y1, double x2, double y2, double dist) {
+		return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2) < dist*dist;
+	}
 	
 	//El objeto esta en el mapa?
 	public static boolean estarEnEntorno(double x, double y, Entorno e) {

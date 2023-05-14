@@ -35,14 +35,14 @@ public class Nave
 	}
 
 	
-	public void moverAdelante() {
-		this.x += Math.cos(this.angulo)*2;
-		this.y += Math.sin(this.angulo)*2;
-	}
-	public void moverIzquierda() {
-		this.x -= 5;
-	}
-	public void moverDerecha() {
-		this.x += 5;
+	public void mover(double direccion, Entorno entorno) {
+		//Segun positivo seria derecha y negativo izquierda
+		if(!Detector.tocarBorde(this.x,this.y,entorno))
+			this.x += direccion;
+		else
+			if(this.x > 0)
+				this.x -= 10;
+			else if(this.x < 5)
+				this.x += 15;
 	}
 }
