@@ -11,10 +11,13 @@ import entorno.InterfaceJuego;
 public class Juego extends InterfaceJuego {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
-	Nave nave;
 	Image fondo;
-	Asteroide[] asteroides;
 	
+	Nave nave;
+	Proyectil naveProyectil;
+	
+	
+	Asteroide[] asteroides;
 	Enemigo[] enemigos;
 	int contador;
 	
@@ -43,6 +46,8 @@ public class Juego extends InterfaceJuego {
 		incremento=0.01;
 		
 		// Inicializar lo que haga falta para el juego
+		
+		naveProyectil = new Proyectil(entorno,1,2,nave.x,nave.y);
 		
 		//ASTEROIDES
 		asteroides = new Asteroide[4];
@@ -85,21 +90,35 @@ public class Juego extends InterfaceJuego {
 		}
 		
 		
-		//Controles Nave
+		//NAVE
 		if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada(TECLA_DERECHA_D))
-			//nave.moverDerecha();
 			nave.mover(5,entorno);
 			
 		
 		if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(TECLA_IZQUIERDA_A))
-			//nave.moverIzquierda();
 			nave.mover(-5,entorno);
+		
+		if (entorno.estaPresionada(entorno.TECLA_ESPACIO)) {
+			if(naveProyectil == null)
+				naveProyectil = new Proyectil(entorno,1,2,nave.x,nave.y);
+		}
+		
+		//Proyectil NAVE
+		/*
+		if(!Detector.estarEnEntorno(naveProyectil.x,naveProyectil.y,entorno)) {
+			naveProyectil = null;
+		}
+		*/
+		naveProyectil.dibujar();
+		naveProyectil.mover();
+		
+		
 		
 		
 		//ASTEROIDES
 		for(int i=0;i<asteroides.length;i++) {
 			asteroides[i].mover(entorno);
-			asteroides[i].dibujarse(entorno);
+			asteroides[i].dibujar(entorno);
 			
 			//Si enemigo colisiona con el jugador
 			if (nave != null  && asteroides[i] != null && 

@@ -46,18 +46,7 @@ public class Enemigo {
 		{
 			this.angulo=3 * Math.PI/4;
 		}
-	}  
-	/*
-    public boolean tocarBorde() {
-    	return this.x <10 || this.x > e.ancho()-10;
-    }
-    */
-	/*
-	public boolean estarEnEntorno() {
-		return !(this.x < - e.ancho()*0.2 || this.x > e.ancho()*1.2 ||
-				this.y < - e.alto()*0.2  || this.y > e.alto()*1.2);  
 	}
-	*/
 
 
 }

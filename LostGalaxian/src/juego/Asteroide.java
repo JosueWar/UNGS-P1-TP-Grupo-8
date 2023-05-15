@@ -29,7 +29,7 @@ public class Asteroide
 		 
 	}
 	
-	public void dibujarse(Entorno entorno)
+	public void dibujar(Entorno entorno)
 	{
         //entorno.dibujarCirculo(x, y,50, Color.yellow);
 		entorno.dibujarImagen(img1, this.x, this.y, this.angulo, this.escala);
