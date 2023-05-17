@@ -22,24 +22,31 @@ public class Proyectil {
 			this.escala=1;
 			this.velocidad=vel;
 			this.x=inicioX;
-			this.y=inicioY - 70;
+			this.y=inicioY - 80;
 			this.angulo=-1;
 			img = Herramientas.cargarImagen("asteroide.png");
 		}
 		//Si es Destructor Estelar
+		if(tipo == 2) {
+			this.escala=1;
+			this.velocidad=vel;
+			this.x=inicioX;
+			this.y=inicioY + 80;
+			this.angulo=1;
+			img = Herramientas.cargarImagen("asteroide.png");
+		}
+		//Si es Jefe
 	}
 	
 	// Dibujar
 	public void dibujar() {
 		//Cambiar para proyectil astro o ion u otro
-		if (tipo == 1)
-			e.dibujarImagen(img, this.x, this.y, this.angulo, escala);
-		else if (tipo == 2)
-			e.dibujarImagen(img, this.x, this.y, this.angulo, escala);
+		e.dibujarImagen(img, this.x, this.y, this.angulo, escala);
 	}
 	// movimientos
 	public void mover() {
-		this.y += Math.sin(this.angulo)*velocidad;
+		if(tipo == 1)
+			this.y += Math.sin(this.angulo)*velocidad;
 		
 		
 	}

@@ -3,6 +3,7 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.util.LinkedList;
 
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -14,11 +15,12 @@ public class Juego extends InterfaceJuego {
 	Image fondo;
 	
 	Nave nave;
-	Proyectil naveProyectil;
+	Proyectil pNave;
 	
 	
 	Asteroide[] asteroides;
 	Enemigo[] enemigos;
+	LinkedList<Proyectil> pEnemigos;
 	int contador;
 	
 
@@ -31,6 +33,11 @@ public class Juego extends InterfaceJuego {
 	public final char TECLA_DERECHA_D = 'd';
 	public final char TECLA_IZQUIERDA_A = 'a';
 	
+	//Elegir nivel
+	double nivel = 1;
+	
+	double dificultad =  nivel * Extras.generarRandomDouble(3, 6);
+	
 	//Pantalla
 	int ancho = 800;
 	int alto = 600;
@@ -39,15 +46,17 @@ public class Juego extends InterfaceJuego {
 	Juego() {
 		// Inicializa el objeto entorno
 		entorno = new Entorno(this, "Lost Galaxian - Grupo 8 - v1", ancho, alto);
-		nave = new Nave(ancho/2, alto-40);
+		nave = new Nave(entorno, ancho/2, alto-40);
 		fondo=Herramientas.cargarImagen("fondo.gif");
-		anguloFondo=0;
+		anguloFondo= 0;
 		escalaFondo=1.7;
 		incremento=0.01;
 		
 		// Inicializar lo que haga falta para el juego
 		
-		naveProyectil = new Proyectil(entorno,1,2,nave.x,nave.y);
+		
+		//PROYECTILES
+		pEnemigos = new LinkedList<Proyectil>();
 		
 		//ASTEROIDES
 		asteroides = new Asteroide[4];
@@ -59,10 +68,10 @@ public class Juego extends InterfaceJuego {
 		//ENEMIGOS
 		enemigos =new Enemigo[6];
 		for (int i=0; i < enemigos.length;i++) {
-			enemigos[i]=new Enemigo(entorno, 0.2 ,4.0*Math.random()+1);
+			enemigos[i]=new Enemigo(entorno, 0.2 ,4.0*Math.random()+5);
 		}
 		contador=0;
-
+		
 		// ...
 
 		// Inicia el juego!
@@ -91,27 +100,58 @@ public class Juego extends InterfaceJuego {
 		
 		
 		//NAVE
-		if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada(TECLA_DERECHA_D))
-			nave.mover(5,entorno);
+		if(nave != null) {
+			if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada(TECLA_DERECHA_D))
+				nave.mover(5,entorno);
+				
 			
-		
-		if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(TECLA_IZQUIERDA_A))
-			nave.mover(-5,entorno);
-		
-		if (entorno.estaPresionada(entorno.TECLA_ESPACIO)) {
-			if(naveProyectil == null)
-				naveProyectil = new Proyectil(entorno,1,2,nave.x,nave.y);
+			if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(TECLA_IZQUIERDA_A))
+				nave.mover(-5,entorno);
+			
+			
+			if (pNave == null && entorno.estaPresionada(entorno.TECLA_ESPACIO)) {
+				pNave= new Proyectil(entorno,1,5,nave.x,nave.y);
+			}
+			
+			
 		}
 		
-		//Proyectil NAVE
-		/*
-		if(!Detector.estarEnEntorno(naveProyectil.x,naveProyectil.y,entorno)) {
-			naveProyectil = null;
-		}
-		*/
-		naveProyectil.dibujar();
-		naveProyectil.mover();
 		
+		//PROYECTILES
+		
+		//Proyectil Nave
+		if(pNave != null){
+			pNave.dibujar();
+			pNave.mover();
+			//Desaparecerlo si esta fuera del mapa
+			if(!Detector.estarEnEntorno(pNave.x, pNave.y, entorno)) {
+				pNave=null;
+			}
+		}
+		
+		
+		//Proyectil enemigos
+		
+		for(int i=0;i<pEnemigos.size();i++) {
+			if(pEnemigos.get(i) !=  null) {
+				//Accionar proyectiles
+				pEnemigos.get(i).dibujar();
+				pEnemigos.get(i).mover();
+				
+				//Colisiones
+				
+				//Si colisiona a un jugador
+				if(pEnemigos.get(i).tipo == 1 && Detector.colisiona(nave.x,nave.y, pEnemigos.get(i).x,pEnemigos.get(i).y,20)) {
+					System.out.println("colision con iones!!!!");
+					nave=null;
+				}
+				
+				//Desaparecerlo si esta fuera del mapa
+				if(!Detector.estarEnEntorno(pEnemigos.get(i).x, pEnemigos.get(i).y, entorno)) {
+					pEnemigos.remove(i);
+				}
+			}
+		}
 		
 		
 		
@@ -153,7 +193,14 @@ public class Juego extends InterfaceJuego {
 						enemigos[i].cambiarAngulo();
 						enemigos[j].cambiarAngulo();
 					}
+					//Si esta muy cerca de un asteroide
 					
+					for(int k=0;k<asteroides.length;k++) {
+						if (enemigos[i] != null  && asteroides[k] != null && 
+								Detector.colisiona(enemigos[i].x,enemigos[i].y, asteroides[k].x,asteroides[k].y,50)) {
+								enemigos[i].cambiarAngulo();
+							}
+					}
 				}
 				
 				//Si enemigo colisiona con el jugador

@@ -2,6 +2,7 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.util.LinkedList;
 
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -14,11 +15,14 @@ public class Nave
 	double angulo;
 	Image img1;
 	Image img2;
+
+	Entorno e;
 	
-	public Nave(int x, int y) 
+	public Nave(Entorno ent,int x, int y) 
 	{
 		this.x = x;
 		this.y = y;
+		e = ent;
 	
 		img1 = Herramientas.cargarImagen("nave.png");
 		img2 = Herramientas.cargarImagen("nave.png");
@@ -33,6 +37,7 @@ public class Nave
 		else
 			entorno.dibujarImagen(img2, this.x, this.y, this.angulo, 0.2);
 	}
+	
 
 	
 	public void mover(double direccion, Entorno entorno) {

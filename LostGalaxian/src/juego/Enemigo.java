@@ -1,6 +1,7 @@
 package juego;
 
 import java.awt.Image;
+import java.util.LinkedList;
 
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -9,6 +10,7 @@ public class Enemigo {
 	double x, y, angulo, escala,velocidad;
 	Image en;
 	Entorno e;
+	LinkedList<Proyectil> iones = new LinkedList<Proyectil>();
 
 	public Enemigo(Entorno ent, double esc, double vel) {
 		this.e=ent;
@@ -36,6 +38,11 @@ public class Enemigo {
 		   cambiarAngulo();
 		}
 		
+	}
+	//Entorno ent, int tipoProyectil, double vel, double inicioX, double inicioY
+	public void disparar() {
+		Proyectil i = new Proyectil(e,2,5,this.x,this.y+10);
+		iones.addLast(i);
 	}
 
 	public void cambiarAngulo() {
