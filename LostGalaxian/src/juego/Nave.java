@@ -42,7 +42,7 @@ public class Nave
 	
 	public void mover(double direccion, Entorno entorno) {
 		//Segun positivo seria derecha y negativo izquierda
-		if(!Detector.tocarBorde(this.x,this.y,entorno))
+		if(!Detector.tocarBordeEjeX(this.x,entorno))
 			this.x += direccion;
 		else
 			if(this.x > 0)

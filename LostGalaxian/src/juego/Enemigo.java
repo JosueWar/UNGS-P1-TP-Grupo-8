@@ -10,7 +10,6 @@ public class Enemigo {
 	double x, y, angulo, escala,velocidad;
 	Image en;
 	Entorno e;
-	LinkedList<Proyectil> iones = new LinkedList<Proyectil>();
 
 	public Enemigo(Entorno ent, double esc, double vel) {
 		this.e=ent;
@@ -34,16 +33,19 @@ public class Enemigo {
 		this.y =this.y + this.velocidad * Math.sin(angulo) * 0.1;
 		
 		//Cambia de angulo si toca el borde de la pantalla
-		if(Math.random() > 0.995 || Detector.tocarBorde(this.x,this.y,this.e)) {
+		if(Math.random() > 0.995 || Detector.tocarBordeEjeX(this.x,this.e)) {
 		   cambiarAngulo();
 		}
 		
 	}
+	
+	/*
 	//Entorno ent, int tipoProyectil, double vel, double inicioX, double inicioY
 	public void disparar() {
 		Proyectil i = new Proyectil(e,2,5,this.x,this.y+10);
 		iones.addLast(i);
 	}
+	*/
 
 	public void cambiarAngulo() {
 		if(this.angulo > Math.PI/2) {

@@ -5,7 +5,7 @@ import entorno.Entorno;
 public class Detector {
 	
 	//Colisiones y limites de mapa
-	public static boolean tocarBorde(double x, double y, Entorno e) {
+	public static boolean tocarBordeEjeX(double x, Entorno e) {
     	return x <10 || x > e.ancho()-10;
     }
 	public static boolean colisiona(double x1, double y1, double x2, double y2, double dist) {
