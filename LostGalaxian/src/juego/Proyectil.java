@@ -10,7 +10,8 @@ public class Proyectil {
 	// Variables de instancia
 	double x, y, angulo, escala,velocidad;
 	int tipo;
-	Image img;
+	Image proyecNave;
+	Image proyecEnem;
 	Entorno e;
 	
 	public Proyectil(Entorno ent, int tipoProyectil, double vel, double inicioX, double inicioY) {
@@ -24,7 +25,7 @@ public class Proyectil {
 			this.x=inicioX;
 			this.y=inicioY - 80;
 			this.angulo=-1;
-			img = Herramientas.cargarImagen("asteroide.png");
+			proyecNave= Herramientas.cargarImagen("Proyectil.png");
 		}
 		//Si es Destructor Estelar
 		if(tipo == 2) {
@@ -33,7 +34,7 @@ public class Proyectil {
 			this.x=inicioX;
 			this.y=inicioY + 80;
 			this.angulo=1;
-			img = Herramientas.cargarImagen("asteroide.png");
+			proyecEnem= Herramientas.cargarImagen("Proyectil.png");
 		}
 		//Si es Jefe
 	}
@@ -41,7 +42,7 @@ public class Proyectil {
 	// Dibujar
 	public void dibujar() {
 		//Cambiar para proyectil astro o ion u otro
-		e.dibujarImagen(img, this.x, this.y, this.angulo, escala);
+		e.dibujarImagen(proyecNave, this.x, this.y, this.angulo, escala);
 	}
 	// movimientos
 	public void mover() {

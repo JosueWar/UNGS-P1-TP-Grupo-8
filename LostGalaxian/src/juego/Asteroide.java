@@ -1,7 +1,6 @@
 package juego;
 
 
-import java.awt.Color;
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -27,6 +26,13 @@ public class Asteroide
 		angulo=Extras.generarRandomDouble(0,3.14);
 		velocidad=Extras.generarRandomDouble(1,5);;
 		 
+	}
+	public void crearAsteroides() {
+	Asteroide[] asteroides = new Asteroide[4];
+	for(int i=0;i<4;i++) {
+		Asteroide a = new Asteroide(e, 0.5 ,Extras.generarRandomDouble(1,5));
+		asteroides[i]=a;
+	}
 	}
 	
 	public void dibujar(Entorno entorno)

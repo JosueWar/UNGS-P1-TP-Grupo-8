@@ -7,4 +7,8 @@ public class Extras {
 		double valorRandom= valorMinimo+(valorMaximo-valorMinimo)*r.nextDouble();
 		return valorRandom;
 	}
+
+	
+
+
 }

@@ -1,14 +1,12 @@
 package juego;
 
 import java.awt.Image;
-import java.util.LinkedList;
-
 import entorno.Entorno;
 import entorno.Herramientas;
 
 public class Enemigo {
 	double x, y, angulo, escala,velocidad;
-	Image en;
+	Image enem;
 	Entorno e;
 
 	public Enemigo(Entorno ent, double esc, double vel) {
@@ -18,14 +16,15 @@ public class Enemigo {
 		this.x=Math.random()*e.ancho();
 		this.y=-Math.random()*e.alto()*0.2;
 		this.angulo=Math.PI / 4.0 + (Math.random()>0.5?1:0) * Math.PI/2;
+		this.enem=Herramientas.cargarImagen("enemigo.png");
 
-		this.en=Herramientas.cargarImagen("enemigo.png");
+	} 
 
-	}
+	
 
 	// Dibujar
 	public void dibujar() {
-		this.e.dibujarImagen(this.en, this.x, this.y, 0.0, this.escala);
+		this.e.dibujarImagen(this.enem, this.x, this.y, 0.0, this.escala);
 	}
 	// movimientos
 	public void mover() {
@@ -38,15 +37,6 @@ public class Enemigo {
 		}
 		
 	}
-	
-	/*
-	//Entorno ent, int tipoProyectil, double vel, double inicioX, double inicioY
-	public void disparar() {
-		Proyectil i = new Proyectil(e,2,5,this.x,this.y+10);
-		iones.addLast(i);
-	}
-	*/
-
 	public void cambiarAngulo() {
 		if(this.angulo > Math.PI/2) {
 			this.angulo=Math.PI/4;
@@ -56,6 +46,16 @@ public class Enemigo {
 			this.angulo=3 * Math.PI/4;
 		}
 	}
+	
+	/*
+	//Entorno ent, int tipoProyectil, double vel, double inicioX, double inicioY
+	public void disparar() {
+		Proyectil i = new Proyectil(e,2,5,this.x,this.y+10);
+		iones.addLast(i);
+	}
+	*/
+
+
 
 
 }

@@ -3,8 +3,6 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.util.LinkedList;
-
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
@@ -13,6 +11,8 @@ public class Juego extends InterfaceJuego {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
 	Image fondo;
+	Image gameover;
+	Image ganaste;
 	
 	Nave nave;
 	Proyectil pNave;
@@ -20,7 +20,7 @@ public class Juego extends InterfaceJuego {
 	
 	Asteroide[] asteroides;
 	Enemigo[] enemigos;
-	LinkedList<Proyectil> pEnemigos;
+	Proyectil[] pEnemigos;
 	int contador;
 	
 
@@ -48,6 +48,9 @@ public class Juego extends InterfaceJuego {
 		entorno = new Entorno(this, "Lost Galaxian - Grupo 8 - v1", ancho, alto);
 		nave = new Nave(entorno, ancho/2, alto-40);
 		fondo=Herramientas.cargarImagen("fondo.gif");
+		
+	    gameover=Herramientas.cargarImagen("gameover.png");
+	    ganaste=Herramientas.cargarImagen("ganaste.png");
 		anguloFondo= 0;
 		escalaFondo=1.7;
 		incremento=0.01;
@@ -56,7 +59,8 @@ public class Juego extends InterfaceJuego {
 		
 		
 		//PROYECTILES
-		pEnemigos = new LinkedList<Proyectil>();
+		
+		
 		
 		//ASTEROIDES
 		asteroides = new Asteroide[4];
@@ -66,9 +70,12 @@ public class Juego extends InterfaceJuego {
 		}
 		
 		//ENEMIGOS
-		enemigos =new Enemigo[6];
+		enemigos =new Enemigo[4];
 		for (int i=0; i < enemigos.length;i++) {
 			enemigos[i]=new Enemigo(entorno, 0.2 ,4.0*Math.random()+5);
+			// enemigos[i].e.dibujarTriangulo(300, 500, 5, 8, 1, Color.GREEN);
+			
+			
 		}
 		contador=0;
 		
@@ -99,7 +106,7 @@ public class Juego extends InterfaceJuego {
 		}
 		
 		
-		//NAVE
+		//Movimiento de la NAVE
 		if(nave != null) {
 			if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada(TECLA_DERECHA_D))
 				nave.mover(5,entorno);
@@ -131,24 +138,24 @@ public class Juego extends InterfaceJuego {
 		
 		
 		//Proyectil enemigos
-		
-		for(int i=0;i<pEnemigos.size();i++) {
-			if(pEnemigos.get(i) !=  null) {
+		pEnemigos = new Proyectil[enemigos.length ];
+		for(int i=0;i < pEnemigos.length;i++) {
+			if(pEnemigos[i] !=  null) {
 				//Accionar proyectiles
-				pEnemigos.get(i).dibujar();
-				pEnemigos.get(i).mover();
+				pEnemigos[i].dibujar();
+				pEnemigos[i].mover();
 				
 				//Colisiones
 				
 				//Si colisiona a un jugador
-				if(pEnemigos.get(i).tipo == 1 && Detector.colisiona(nave.x,nave.y, pEnemigos.get(i).x,pEnemigos.get(i).y,20)) {
+				if(pEnemigos[i].tipo == 1 && Detector.colisiona(nave.x,nave.y, pEnemigos[i].x,pEnemigos[i].y,20)) {
 					System.out.println("colision con iones!!!!");
 					nave=null;
 				}
 				
 				//Desaparecerlo si esta fuera del mapa
-				if(!Detector.estarEnEntorno(pEnemigos.get(i).x, pEnemigos.get(i).y, entorno)) {
-					pEnemigos.remove(i);
+				if(!Detector.estarEnEntorno(pEnemigos[i].x, pEnemigos[i].y, entorno)) {
+					pEnemigos[i] = null;
 				}
 			}
 		}
@@ -219,14 +226,25 @@ public class Juego extends InterfaceJuego {
 		
 		
 		//Entorno
-		nave.dibujarse(entorno);
-
-		entorno.cambiarFont("Arial", 20, Color.white);
-		entorno.escribirTexto("El angulo es: " + nave.angulo, 500, 100);
-		entorno.escribirTexto("posicion en x:" + nave.x, 500, 150);
-		entorno.escribirTexto("posicion en y:" + nave.y, 500, 200);
-		entorno.escribirTexto("contador:" + contador, 500, 250);
 		
+		if (nave != null) {
+			nave.dibujarse(entorno);
+			entorno.cambiarFont("Arial", 20, Color.white);
+			entorno.escribirTexto("El angulo es: " + nave.angulo, 500, 100);
+			entorno.escribirTexto("posicion en x:" + nave.x, 500, 150);
+			entorno.escribirTexto("posicion en y:" + nave.y, 500, 200);
+			entorno.escribirTexto("contador:" + contador, 500, 250);	
+			
+		}else if (nave == null) {
+			entorno.dibujarImagen(gameover,400, 300, 0.0);
+			// Herramientas.cargarSonido("perdiste.wav").start();
+			
+		}
+		else if(nave != null && enemigos == null) {
+			entorno.dibujarImagen(ganaste,400, 300, 0.0);
+		}
+			
+	
 	}
 	
 
