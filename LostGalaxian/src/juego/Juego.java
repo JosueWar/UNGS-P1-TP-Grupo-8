@@ -13,6 +13,7 @@ public class Juego extends InterfaceJuego {
 	Image fondo;
 	Image gameover;
 	Image ganaste;
+	boolean debugMode;
 	
 	Nave nave;
 	Proyectil pNave;
@@ -42,12 +43,15 @@ public class Juego extends InterfaceJuego {
 	int ancho = 800;
 	int alto = 600;
 	// ...
+	
 
 	Juego() {
 		// Inicializa el objeto entorno
 		entorno = new Entorno(this, "Lost Galaxian - Grupo 8 - v1", ancho, alto);
-		nave = new Nave(entorno, ancho/2, alto-40);
+		nave = new Nave(entorno, ancho/2, alto-40,0.2);
 		fondo=Herramientas.cargarImagen("fondo.gif");
+		debugMode = false;
+		
 		
 	    gameover=Herramientas.cargarImagen("gameover.png");
 	    ganaste=Herramientas.cargarImagen("ganaste.png");
@@ -106,7 +110,7 @@ public class Juego extends InterfaceJuego {
 		}
 		
 		
-		//Movimiento de la NAVE
+		//CONTROLES
 		if(nave != null) {
 			if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada(TECLA_DERECHA_D))
 				nave.mover(5,entorno);
@@ -117,9 +121,15 @@ public class Juego extends InterfaceJuego {
 			
 			
 			if (pNave == null && entorno.estaPresionada(entorno.TECLA_ESPACIO)) {
-				pNave= new Proyectil(entorno,1,5,nave.x,nave.y);
+				pNave= new Proyectil(entorno,1,3,5,nave.x,nave.y);
 			}
 			
+			if (entorno.sePresiono('m')) {
+				debugMode=true;
+			}
+			if (entorno.sePresiono('n')) {
+				debugMode=false;
+			}
 			
 		}
 		
@@ -130,6 +140,11 @@ public class Juego extends InterfaceJuego {
 		if(pNave != null){
 			pNave.dibujar();
 			pNave.mover();
+			
+			//debugMode
+			if(debugMode == true)
+				pNave.dibujarCaja();
+			
 			//Desaparecerlo si esta fuera del mapa
 			if(!Detector.estarEnEntorno(pNave.x, pNave.y, entorno)) {
 				pNave=null;
@@ -166,6 +181,9 @@ public class Juego extends InterfaceJuego {
 		for(int i=0;i<asteroides.length;i++) {
 			asteroides[i].mover(entorno);
 			asteroides[i].dibujar(entorno);
+			//debug mode
+			if(debugMode == true)
+				asteroides[i].dibujarCaja();
 			
 			//Si enemigo colisiona con el jugador
 			if (nave != null  && asteroides[i] != null && 
@@ -184,6 +202,10 @@ public class Juego extends InterfaceJuego {
 			if(enemigos[i] != null) {
 				enemigos[i].dibujar();
 				enemigos[i].mover();
+				//debugMode
+				if(debugMode == true) {
+					enemigos[i].dibujarCaja();
+				}
 				
 				//Regresa hacia arriba si bajo demasiado la nave
 				if(!Detector.estarEnEntorno(enemigos[i].x,enemigos[i].y,entorno)) {
@@ -216,6 +238,8 @@ public class Juego extends InterfaceJuego {
 					System.out.println("colision con enemigo!!!!");
 					nave=null;
 				}
+				
+			
 			}
 			
 		}
@@ -225,15 +249,20 @@ public class Juego extends InterfaceJuego {
 		
 		
 		
-		//Entorno
+		//NAVE
 		
 		if (nave != null) {
 			nave.dibujarse(entorno);
-			entorno.cambiarFont("Arial", 20, Color.white);
-			entorno.escribirTexto("El angulo es: " + nave.angulo, 500, 100);
-			entorno.escribirTexto("posicion en x:" + nave.x, 500, 150);
-			entorno.escribirTexto("posicion en y:" + nave.y, 500, 200);
-			entorno.escribirTexto("contador:" + contador, 500, 250);	
+			
+			//debug mode
+			if(debugMode == true) {
+				nave.dibujarCaja();
+				entorno.cambiarFont("Arial", 20, Color.white);
+				entorno.escribirTexto("El angulo es: " + nave.angulo, 500, 100);
+				entorno.escribirTexto("posicion en x:" + nave.x, 500, 150);
+				entorno.escribirTexto("posicion en y:" + nave.y, 500, 200);
+				entorno.escribirTexto("contador:" + contador, 500, 250);
+			}
 			
 		}else if (nave == null) {
 			entorno.dibujarImagen(gameover,400, 300, 0.0);

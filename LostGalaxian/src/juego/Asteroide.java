@@ -1,6 +1,7 @@
 package juego;
 
 
+import java.awt.Color;
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -24,7 +25,8 @@ public class Asteroide
 		img1 = Herramientas.cargarImagen("asteroide.png");
 		//Se tuvo que tener cuenta en radianes y la direccion de los asteroides
 		angulo=Extras.generarRandomDouble(0,3.14);
-		velocidad=Extras.generarRandomDouble(1,5);;
+		velocidad=Extras.generarRandomDouble(1,5);
+		
 		 
 	}
 	public void crearAsteroides() {
@@ -69,7 +71,15 @@ public class Asteroide
 		{
 			this.angulo=3 * Math.PI/4;
 		}
-	}  
+	}
+	public void dibujarCaja() {
+		
+		//System.out.println("Alto: "+img1.getHeight(e)*escala);
+		//System.out.println("Ancho: "+img1.getWidth(e)*escala);
+		
+		Color color = new Color(255, 229, 204);
+		e.dibujarRectangulo(x, y, img1.getWidth(e)*escala, img1.getHeight(e)*escala, angulo, color);
+	}
 
    
 }

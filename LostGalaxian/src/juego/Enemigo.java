@@ -1,5 +1,6 @@
 package juego;
 
+import java.awt.Color;
 import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -54,6 +55,14 @@ public class Enemigo {
 		iones.addLast(i);
 	}
 	*/
+	public void dibujarCaja() {
+		
+		//System.out.println("Alto: "+img1.getHeight(e)*escala);
+		//System.out.println("Ancho: "+img1.getWidth(e)*escala);
+		
+		Color color = new Color(255, 102, 102);
+		e.dibujarRectangulo(x, y, enem.getWidth(e)*escala, enem.getHeight(e)*escala, angulo, color);
+	}
 
 
 
