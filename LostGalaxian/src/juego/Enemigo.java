@@ -51,16 +51,9 @@ public class Enemigo {
 		}
 	}
 	
-	/*
-	//Entorno ent, int tipoProyectil, double vel, double inicioX, double inicioY
-	public void disparar() {
-		Proyectil i = new Proyectil(e,2,5,this.x,this.y+10);
-		iones.addLast(i);
-	}
-	*/
 	public void dibujarCaja() {
 		Color color = new Color(255, 102, 102);
-		e.dibujarRectangulo(x, y, img.getWidth(e)*escala, img.getHeight(e)*escala, angulo, color);
+		e.dibujarRectangulo(x, y, img.getWidth(e)*escala, img.getHeight(e)*escala, 0, color);
 	}
 
 

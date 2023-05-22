@@ -57,7 +57,7 @@ public class Nave
 		//System.out.println("Ancho: "+img1.getWidth(e)*escala);
 		
 		Color color = new Color(0, 0, 255);
-		e.dibujarRectangulo(x, y, img1.getWidth(e)*escala, img1.getHeight(e)*escala, angulo, color);
+		e.dibujarRectangulo(x, y, img1.getWidth(e)*escala, img1.getHeight(e)*escala, 0, color);
 		
 	}
 }

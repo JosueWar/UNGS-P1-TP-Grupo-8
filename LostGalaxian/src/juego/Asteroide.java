@@ -77,7 +77,7 @@ public class Asteroide
 	}
 	public void dibujarCaja() {
 		Color color = new Color(255, 229, 204);
-		e.dibujarRectangulo(x, y, img.getWidth(e)*escala, img.getHeight(e)*escala, angulo, color);
+		e.dibujarRectangulo(x, y, img.getWidth(e)*escala, img.getHeight(e)*escala, 0, color);
 	}
 
    

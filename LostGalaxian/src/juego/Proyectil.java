@@ -62,7 +62,7 @@ public class Proyectil {
 		//System.out.println("Ancho: "+img1.getWidth(e)*escala);
 		
 		Color color = new Color(255, 0, 0);
-		e.dibujarRectangulo(x, y, img.getWidth(e)*escala, img.getHeight(e)*escala, angulo, color);
+		e.dibujarRectangulo(x, y, img.getWidth(e)*escala, img.getHeight(e)*escala, 0, color);
 	}
 
 	
