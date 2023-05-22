@@ -6,8 +6,8 @@ import entorno.Entorno;
 import entorno.Herramientas;
 
 public class Enemigo {
-	double x, y, angulo, escala,velocidad;
-	Image enem;
+	double x, y, angulo,escala,velocidad,ancho,alto;
+	Image img;
 	Entorno e;
 
 	public Enemigo(Entorno ent, double esc, double vel) {
@@ -17,7 +17,10 @@ public class Enemigo {
 		this.x=Math.random()*e.ancho();
 		this.y=-Math.random()*e.alto()*0.2;
 		this.angulo=Math.PI / 4.0 + (Math.random()>0.5?1:0) * Math.PI/2;
-		this.enem=Herramientas.cargarImagen("enemigo.png");
+		this.img=Herramientas.cargarImagen("enemigo.png");
+		
+		ancho=img.getWidth(e)*escala;
+		alto=img.getHeight(e)*escala;
 
 	} 
 
@@ -25,7 +28,7 @@ public class Enemigo {
 
 	// Dibujar
 	public void dibujar() {
-		this.e.dibujarImagen(this.enem, this.x, this.y, 0.0, this.escala);
+		this.e.dibujarImagen(this.img, this.x, this.y, 0.0, this.escala);
 	}
 	// movimientos
 	public void mover() {
@@ -56,12 +59,8 @@ public class Enemigo {
 	}
 	*/
 	public void dibujarCaja() {
-		
-		//System.out.println("Alto: "+img1.getHeight(e)*escala);
-		//System.out.println("Ancho: "+img1.getWidth(e)*escala);
-		
 		Color color = new Color(255, 102, 102);
-		e.dibujarRectangulo(x, y, enem.getWidth(e)*escala, enem.getHeight(e)*escala, angulo, color);
+		e.dibujarRectangulo(x, y, img.getWidth(e)*escala, img.getHeight(e)*escala, angulo, color);
 	}
 
 

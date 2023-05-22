@@ -9,7 +9,7 @@ import entorno.Herramientas;
 public class Proyectil {
 	
 	// Variables de instancia
-	double x, y, angulo, escala,velocidad;
+	double x, y, angulo, escala,velocidad,ancho,alto;
 	int tipo;
 	Image img;
 	Entorno e;
@@ -26,6 +26,9 @@ public class Proyectil {
 			this.y=inicioY - 80;
 			this.angulo=0;
 			img= Herramientas.cargarImagen("Proyectil.png");
+			
+			ancho=img.getWidth(e)*escala;
+			alto=img.getHeight(e)*escala;
 		}
 		//Si es Destructor Estelar
 		if(tipo == 2) {
@@ -35,6 +38,9 @@ public class Proyectil {
 			this.y=inicioY + 80;
 			this.angulo=0;
 			img= Herramientas.cargarImagen("Proyectil.png");
+			
+			ancho=img.getWidth(e)*escala;
+			alto=img.getHeight(e)*escala;
 		}
 		//Si es Jefe
 	}

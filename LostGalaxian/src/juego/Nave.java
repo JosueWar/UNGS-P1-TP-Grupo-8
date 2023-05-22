@@ -8,7 +8,7 @@ import entorno.Herramientas;
 public class Nave 
 {
 	// Variables de instancia
-	double x,y,escala;
+	double x,y,escala,ancho,alto;
 	double angulo;
 	Image img1;
 	Image img2;
@@ -24,6 +24,8 @@ public class Nave
 	
 		img1 = Herramientas.cargarImagen("nave.png");
 		img2 = Herramientas.cargarImagen("nave.png");
+		ancho=img1.getWidth(e)*escala;
+		alto=img1.getHeight(e)*escala;
 	}
 	
 	public void dibujarse(Entorno entorno)
@@ -33,7 +35,7 @@ public class Nave
 		if (entorno.estaPresionada(entorno.TECLA_ARRIBA))
 			entorno.dibujarImagen(img1, this.x, this.y, this.angulo, escala);
 		else
-			entorno.dibujarImagen(img2, this.x, this.y, this.angulo, escala);
+			entorno.dibujarImagen(img1, this.x, this.y, this.angulo, escala);
 	}
 	
 
@@ -50,10 +52,12 @@ public class Nave
 	}
 	public void dibujarCaja() {
 		
+		//definio previomente ancho y alto del punto central de la nave
 		//System.out.println("Alto: "+img1.getHeight(e)*escala);
 		//System.out.println("Ancho: "+img1.getWidth(e)*escala);
 		
 		Color color = new Color(0, 0, 255);
 		e.dibujarRectangulo(x, y, img1.getWidth(e)*escala, img1.getHeight(e)*escala, angulo, color);
+		
 	}
 }

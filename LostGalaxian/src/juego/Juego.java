@@ -76,10 +76,7 @@ public class Juego extends InterfaceJuego {
 		//ENEMIGOS
 		enemigos =new Enemigo[4];
 		for (int i=0; i < enemigos.length;i++) {
-			enemigos[i]=new Enemigo(entorno, 0.2 ,4.0*Math.random()+5);
-			// enemigos[i].e.dibujarTriangulo(300, 500, 5, 8, 1, Color.GREEN);
-			
-			
+			enemigos[i]=new Enemigo(entorno, 0.2 ,6);
 		}
 		contador=0;
 		
@@ -163,7 +160,7 @@ public class Juego extends InterfaceJuego {
 				//Colisiones
 				
 				//Si colisiona a un jugador
-				if(pEnemigos[i].tipo == 1 && Detector.colisiona(nave.x,nave.y, pEnemigos[i].x,pEnemigos[i].y,20)) {
+				if(pEnemigos[i].tipo == 1 && Detector.colisiona(nave.x,nave.y,nave.ancho,nave.alto,pEnemigos[i].x,pEnemigos[i].y,pEnemigos[i].ancho,pEnemigos[i].alto)) {
 					System.out.println("colision con iones!!!!");
 					nave=null;
 				}
@@ -187,7 +184,7 @@ public class Juego extends InterfaceJuego {
 			
 			//Si enemigo colisiona con el jugador
 			if (nave != null  && asteroides[i] != null && 
-				Detector.colisiona(nave.x,nave.y, asteroides[i].x,asteroides[i].y,20)) {
+				Detector.colisiona(nave.x,nave.y,nave.ancho,nave.alto,asteroides[i].x,asteroides[i].y,asteroides[i].ancho,asteroides[i].alto)) {
 				System.out.println("colision con asteroide!!!!");
 				nave=null;
 			}
@@ -216,25 +213,25 @@ public class Juego extends InterfaceJuego {
 				for(int j=0;j < enemigos.length;j++) {
 					
 					//Si esta muy cerca de una nave
-					if (enemigos[i] != null  && enemigos[j] != null && i != j && 
-						Detector.colisiona(enemigos[i].x,enemigos[i].y, enemigos[j].x,enemigos[j].y,50)) {
+					if (enemigos[j] != null && i != j && 
+						Detector.colisiona(enemigos[i].x,enemigos[i].y,enemigos[i].ancho,enemigos[i].alto, enemigos[j].x,enemigos[j].y,enemigos[j].ancho,enemigos[j].alto)) {
 						
 						enemigos[i].cambiarAngulo();
 						enemigos[j].cambiarAngulo();
 					}
-					//Si esta muy cerca de un asteroide
-					
-					for(int k=0;k<asteroides.length;k++) {
-						if (enemigos[i] != null  && asteroides[k] != null && 
-								Detector.colisiona(enemigos[i].x,enemigos[i].y, asteroides[k].x,asteroides[k].y,50)) {
-								enemigos[i].cambiarAngulo();
-							}
-					}
+				}
+				//Si esta muy cerca de un asteroide
+				
+				for(int k=0;k<asteroides.length;k++) {
+					if (asteroides[k] != null && 
+						Detector.colisiona(asteroides[i].x,asteroides[i].y,asteroides[i].ancho,asteroides[i].alto,enemigos[k].x,enemigos[k].y,enemigos[k].ancho,enemigos[k].alto)) {
+							enemigos[i].cambiarAngulo();
+						}
 				}
 				
 				//Si enemigo colisiona con el jugador
 				if (nave != null  && enemigos[i] != null && 
-					Detector.colisiona(nave.x,nave.y, enemigos[i].x,enemigos[i].y,20)) {
+					Detector.colisiona(nave.x,nave.y,nave.ancho,nave.alto,enemigos[i].x,enemigos[i].y,enemigos[i].ancho,enemigos[i].alto)) {
 					System.out.println("colision con enemigo!!!!");
 					nave=null;
 				}
