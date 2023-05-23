@@ -52,7 +52,7 @@ public class Juego extends InterfaceJuego {
 		asteroides = new Asteroide[cantidadAsteroides];
 		
 		for(int i=0;i<4;i++) {
-			Asteroide a = new Asteroide(entorno, 0.5 ,Extras.generarRandomDouble(1,5));
+			Asteroide a = new Asteroide(entorno, 0.5 ,Utiles.generarRandomDouble(1,5));
 			asteroides[i]=a;
 		}
 		
@@ -74,7 +74,6 @@ public class Juego extends InterfaceJuego {
 	}
 
 	public void tick() {
-		
 		
 		//Fondo
 		entorno.dibujarImagen(fondo, 400, 300, anguloFondo, escalaFondo);
@@ -129,9 +128,9 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 			if(ionesEnemigos[i] ==  null && hayEnemigos(enemigos)) {
-				int enemigoElegido = Extras.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
+				int enemigoElegido = Utiles.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
 				while(enemigos[enemigoElegido] == null) {
-					enemigoElegido = Extras.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
+					enemigoElegido = Utiles.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
 				}
 				ionesEnemigos[i] = new ProyectilEnemigo(entorno,3,5,enemigos[enemigoElegido].x,enemigos[enemigoElegido].y);
 			}

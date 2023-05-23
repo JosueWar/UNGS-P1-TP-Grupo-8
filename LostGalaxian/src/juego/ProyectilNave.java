@@ -8,8 +8,10 @@ import entorno.Herramientas;
 public class ProyectilNave {
 	
 	// Variables de instancia
-	double x, y, angulo, escala,velocidad;
-	int tipo;
+	double x,y;
+	double angulo;
+	double escala;
+	double velocidad;
 	Image img;
 	Entorno entorno;
 	

@@ -7,7 +7,8 @@ import entorno.Herramientas;
 public class Nave 
 {
 	// Variables de instancia
-	double x,y,escala;
+	double x,y;
+	double escala;
 	double angulo;
 	Image img1;
 	Entorno entorno;

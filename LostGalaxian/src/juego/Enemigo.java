@@ -5,7 +5,10 @@ import entorno.Entorno;
 import entorno.Herramientas;
 
 public class Enemigo {
-	double x, y, angulo,escala,velocidad,ancho,alto;
+	double x,y;
+	double angulo;
+	double escala;
+	double velocidad;
 	Image img;
 	Entorno entorno;
 
@@ -17,10 +20,6 @@ public class Enemigo {
 		this.y=diferenciaAltura*70;
 		this.angulo=Math.PI / 4.0 + (Math.random()>0.5?1:0) * Math.PI/2;
 		this.img=Herramientas.cargarImagen("enemigo.png");
-		
-		ancho=img.getWidth(entorno)*escala;
-		alto=img.getHeight(entorno)*escala;
-
 	} 
 
 	
@@ -42,7 +41,6 @@ public class Enemigo {
 				this.x += 15;
 			cambiarAngulo();
 		}
-			
 		
 	}
 	public void cambiarAngulo() {

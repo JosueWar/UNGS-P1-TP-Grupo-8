@@ -1,6 +1,6 @@
 package juego;
 
-public class Extras {
+public class Utiles {
 	public static double generarRandomDouble(double valorMinimo, double valorMaximo) {
 		
 	    double rango = valorMaximo - valorMinimo; //Calcular el rango de números posibles
