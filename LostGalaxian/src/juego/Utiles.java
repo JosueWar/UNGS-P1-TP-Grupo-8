@@ -1,5 +1,7 @@
 package juego;
 
+import java.util.Calendar;
+
 public class Utiles {
 	public static double generarRandomDouble(double valorMinimo, double valorMaximo) {
 		
@@ -17,4 +19,13 @@ public class Utiles {
 	    
 	    return numeroAleatorio;
 	}
+	public static int segundosActuales() {
+		//Obtener la hora actual por bilioteca estandar de java
+        Calendar calendar = Calendar.getInstance();
+        //Obtener los segundos de la hora actual
+        int segundos = calendar.get(Calendar.SECOND);
+        
+        return segundos;
+	}
+	
 }

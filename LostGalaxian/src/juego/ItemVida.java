@@ -5,8 +5,7 @@ import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
 
-public class Asteroide
-{
+public class ItemVida {
 	// Variables de instancia
 	double x,y;
 	double angulo;
@@ -15,7 +14,7 @@ public class Asteroide
 	Image img;
 	Entorno entorno;
 	
-	public Asteroide(Entorno ent, double esc, double vel) 
+	public ItemVida(Entorno ent, double esc, double vel) 
 	{
 		this.entorno=ent;
 		this.escala=esc;
@@ -23,15 +22,16 @@ public class Asteroide
 		this.x=Math.random()*entorno.ancho();
 		this.y=-Math.random()*entorno.alto()*0.2;
 		
-		img = Herramientas.cargarImagen("asteroide.png");
-		angulo=Utiles.generarRandomDouble(0,Math.PI);
+		angulo=Utiles.generarRandomDouble(0,Math.PI/2);
 		velocidad=Utiles.generarRandomDouble(1,5);
+		
+		img = Herramientas.cargarImagen("extraVida.png");
 		 
 	}
 	
 	public void dibujar()
 	{
-		entorno.dibujarImagen(img, this.x, this.y, this.angulo, this.escala);
+		entorno.dibujarImagen(img, this.x, this.y, 0, this.escala);
        	
 	}
 
@@ -51,19 +51,5 @@ public class Asteroide
 		if(this.y < -entorno.alto()*0.05) {
 			this.y=entorno.alto()*1.05;
 		}
-		
 	}
-	//limites
-	public void cambiarAngulo() {
-		if(this.angulo > Math.PI/2) {
-			this.angulo=Math.PI/4;
-		}
-		else
-		{
-			this.angulo=3 * Math.PI/4;
-		}
-	}
-   
 }
-
-

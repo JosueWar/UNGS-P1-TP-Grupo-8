@@ -10,11 +10,13 @@ public class Nave
 	double x,y;
 	double escala;
 	double angulo;
+	int vida;
 	Image img1;
 	Entorno entorno;
 	
 	public Nave(Entorno ent,double x, double y, double esc) 
 	{
+		this.vida=100;
 		this.x = x;
 		this.y = y;
 		this.escala = esc;
@@ -23,11 +25,11 @@ public class Nave
 		img1 = Herramientas.cargarImagen("nave.png");
 	}
 	
-	public void dibujarse(Entorno entorno){
+	public void dibujarse(){
 		entorno.dibujarImagen(img1, this.x, this.y, this.angulo, escala);
 	}
 	
-	public void mover(double direccion, Entorno entorno) {
+	public void mover(double direccion) {
 		//Segun positivo seria derecha y negativo izquierda
 		if(!Detector.tocarBordeEjeX(this.x,entorno))
 			this.x += direccion;
