@@ -187,8 +187,8 @@ public class Juego extends InterfaceJuego {
 				
 				//Si esta muy cerca de un asteroide
 				for(int k=0;k<asteroides.length;k++) {
-					if (asteroides[k] != null && enemigos[k]!=null &&
-						Detector.colisiona(asteroides[i].x,asteroides[i].y,enemigos[k].x,enemigos[k].y,rangoColision)) {
+					if (asteroides[k] != null && enemigos[i]!=null &&
+						Detector.colisiona(asteroides[k].x,asteroides[k].y,enemigos[i].x,enemigos[i].y,rangoColision)) {
 							enemigos[i].cambiarAngulo();
 						}
 				}
