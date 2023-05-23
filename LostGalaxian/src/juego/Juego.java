@@ -201,6 +201,14 @@ public class Juego extends InterfaceJuego {
 				enemigos[i].dibujar();
 				enemigos[i].mover();
 				
+				//Si enemigo esta muy cerca del jugador
+				if (nave != null  && enemigos[i] != null &&
+				Detector.colisiona(nave.x,nave.y,enemigos[i].x,enemigos[i].y,rangoColision*2)) {
+					//Entra en modo kamikaze (toma el angulo hacia el jugador)
+					enemigos[i].cambiarAngulo(nave.x, nave.y);
+					enemigos[i].velocidad=velocidadEnemigos+2;
+				}
+				
 				//Regresa hacia arriba si bajo demasiado la nave
 				if(!Detector.estarEnEntorno(enemigos[i].x,enemigos[i].y,entorno)) {
 					enemigos[i].y = 0;
@@ -212,8 +220,8 @@ public class Juego extends InterfaceJuego {
 					//Si esta muy cerca de una nave
 					if (enemigos[j] != null  && enemigos[i]!=null && i != j &&
 						Detector.colisiona(enemigos[i].x,enemigos[i].y, enemigos[j].x,enemigos[j].y,rangoColision)) {
-						enemigos[i].cambiarAngulo();
-						enemigos[j].cambiarAngulo();
+						enemigos[i].cambiarDireccion();
+						enemigos[j].cambiarDireccion();
 					}
 				}
 				//En caso de colision con un proyectil de jugador
@@ -229,7 +237,7 @@ public class Juego extends InterfaceJuego {
 				for(int k=0;k<asteroides.length;k++) {
 					if (asteroides[k] != null && enemigos[i]!=null &&
 						Detector.colisiona(asteroides[k].x,asteroides[k].y,enemigos[i].x,enemigos[i].y,rangoColision)) {
-							enemigos[i].cambiarAngulo();
+							enemigos[i].cambiarDireccion();
 						}
 				}
 				//Si enemigo colisiona con el jugador
@@ -278,14 +286,14 @@ public class Juego extends InterfaceJuego {
 			}
 			
 			entorno.cambiarFont("Arial", 20, Color.white);
-			entorno.escribirTexto("Vida: " + nave.vida, 500, 100);
-			entorno.escribirTexto("Puntaje: " + puntaje, 500, 150);
-			entorno.escribirTexto("Nivel: " + nivel, 500, 200);
+			entorno.escribirTexto("Vida: " + nave.vida, ancho-200, 100);
+			entorno.escribirTexto("Puntaje: " + puntaje, ancho-200, 150);
+			entorno.escribirTexto("Nivel: " + nivel, ancho-200, 200);
 			
 			
 		}else if (nave == null) {
 			entorno.cambiarFont("Arial", 20, Color.white);
-			entorno.dibujarImagen(gameover,400, 300, 0.0);
+			entorno.dibujarImagen(gameover, ancho/2, 300, 0.0);
 			entorno.escribirTexto("Puntaje Final: " + puntaje, ancho/2-75, alto-50);
 			entorno.escribirTexto("Nivel alcanzado: " + puntaje, ancho/2-75, alto-100);
 		}
@@ -307,8 +315,8 @@ public class Juego extends InterfaceJuego {
 			dañoAsteroides+=20;
 			for(int i=0;i<enemigos.length;i++) { //aumenta la velocidad de las naves que existen y las que van a aparecer
 				if(enemigos[i]!= null)
-					enemigos[i].velocidad+=3;
-				velocidadEnemigos+=3;
+					enemigos[i].velocidad+=2;
+				velocidadEnemigos+=2;
 			}
 		}
 		if(puntaje==300 && nivel == 3) {
@@ -317,8 +325,8 @@ public class Juego extends InterfaceJuego {
 			dañoAsteroides+=20;
 			for(int i=0;i<enemigos.length;i++) { //aumenta la velocidad de las naves que existen y las que van a aparecer
 				if(enemigos[i]!= null)
-					enemigos[i].velocidad+=5;
-				velocidadEnemigos+=5;
+					enemigos[i].velocidad+=2;
+				velocidadEnemigos+=2;
 			}
 		}
 	

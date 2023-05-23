@@ -39,11 +39,15 @@ public class Enemigo {
 				this.x -= 10;
 			else if(this.x < 5)
 				this.x += 15;
-			cambiarAngulo();
+			cambiarDireccion();
 		}
 		
 	}
-	public void cambiarAngulo() {
+	//cambia su angulo en base a las posiciones qe recibe
+	public void cambiarAngulo(double x2, double y2){
+		this.angulo = Math.atan2(y2 - this.y, x2 - this.x);
+	}
+	public void cambiarDireccion() {
 		if(this.angulo > Math.PI/2) {
 			this.angulo=Math.PI/4;
 		}
