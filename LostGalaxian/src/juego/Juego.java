@@ -16,12 +16,13 @@ public class Juego extends InterfaceJuego {
 	boolean debugMode;
 	
 	Nave nave;
-	Proyectil pNave;
+	ProyectilNave proyectilNave;
 	
 	
 	Asteroide[] asteroides;
 	Enemigo[] enemigos;
-	Proyectil[] pEnemigos;
+	ProyectilEnemigo[] ionesEnemigos;
+
 	int contador;
 	
 
@@ -30,10 +31,7 @@ public class Juego extends InterfaceJuego {
 	double incremento;
 
 	// Variables y métodos propios de cada grupo
-	
-	public final char TECLA_DERECHA_D = 'd';
-	public final char TECLA_IZQUIERDA_A = 'a';
-	
+
 	//Elegir nivel y otros
 	double nivel = 1;
 	double dificultad =  nivel * Extras.generarRandomDouble(3, 6);
@@ -56,15 +54,10 @@ public class Juego extends InterfaceJuego {
 	    gameover=Herramientas.cargarImagen("gameover.png");
 	    ganaste=Herramientas.cargarImagen("ganaste.png");
 		anguloFondo= 0;
-		escalaFondo=1.7;
-		incremento=0.01;
+		escalaFondo=1.8;
+		incremento=0;
 		
 		// Inicializar lo que haga falta para el juego
-		
-		
-		//PROYECTILES
-		
-		
 		
 		//ASTEROIDES
 		asteroides = new Asteroide[4];
@@ -79,6 +72,8 @@ public class Juego extends InterfaceJuego {
 			enemigos[i]=new Enemigo(entorno, 0.2 ,6);
 		}
 		contador=0;
+		
+		ionesEnemigos = new ProyectilEnemigo[4]; //Se eligio 4 como limite de cantidad de iones instanciados en pantalla 
 		
 		// ...
 
@@ -97,28 +92,19 @@ public class Juego extends InterfaceJuego {
 		
 		//Fondo
 		entorno.dibujarImagen(fondo, 400, 300, anguloFondo, escalaFondo);
-		//anguloFondo +=0.001;
-		//escalaFondo +=incremento;
-		if(escalaFondo > 5) {
-			incremento=-0.01;
-		}
-		if(escalaFondo < 2) {
-			incremento=0.01;
-		}
-		
 		
 		//CONTROLES
 		if(nave != null) {
-			if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada(TECLA_DERECHA_D))
+			if (entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada('d'))
 				nave.mover(5,entorno);
 				
 			
-			if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(TECLA_IZQUIERDA_A))
+			if (entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada('a'))
 				nave.mover(-5,entorno);
 			
 			
-			if (pNave == null && entorno.estaPresionada(entorno.TECLA_ESPACIO)) {
-				pNave= new Proyectil(entorno,1,3,5,nave.x,nave.y);
+			if (proyectilNave == null && entorno.estaPresionada(entorno.TECLA_ESPACIO)) {
+				proyectilNave= new ProyectilNave(entorno,3,5,nave.x,nave.y);
 			}
 			
 			if (entorno.sePresiono('m')) {
@@ -134,41 +120,47 @@ public class Juego extends InterfaceJuego {
 		//PROYECTILES
 		
 		//Proyectil Nave
-		if(pNave != null){
-			pNave.dibujar();
-			pNave.mover();
+		if(proyectilNave != null){
+			proyectilNave.dibujar();
+			proyectilNave.mover();
 			
 			//debugMode
 			if(debugMode == true)
-				pNave.dibujarCaja();
+				proyectilNave.dibujarCaja();
 			
 			//Desaparecerlo si esta fuera del mapa
-			if(!Detector.estarEnEntorno(pNave.x, pNave.y, entorno)) {
-				pNave=null;
+			if(!Detector.estarEnEntorno(proyectilNave.x, proyectilNave.y, entorno)) {
+				proyectilNave=null;
 			}
 		}
 		
 		
 		//Proyectil enemigos
-		pEnemigos = new Proyectil[enemigos.length ];
-		for(int i=0;i < pEnemigos.length;i++) {
-			if(pEnemigos[i] !=  null) {
+		for(int i=0;i < ionesEnemigos.length;i++) {
+			if(ionesEnemigos[i] !=  null) {
 				//Accionar proyectiles
-				pEnemigos[i].dibujar();
-				pEnemigos[i].mover();
+				ionesEnemigos[i].dibujar();
+				ionesEnemigos[i].mover();
 				
 				//Colisiones
 				
 				//Si colisiona a un jugador
-				if(pEnemigos[i].tipo == 1 && Detector.colisiona(nave.x,nave.y,pEnemigos[i].x,pEnemigos[i].y,rangoColision)) {
+				if(nave != null && Detector.colisiona(nave.x,nave.y,ionesEnemigos[i].x,ionesEnemigos[i].y,rangoColision/2)) {
 					System.out.println("colision con iones!!!!");
 					nave=null;
 				}
 				
 				//Desaparecerlo si esta fuera del mapa
-				if(!Detector.estarEnEntorno(pEnemigos[i].x, pEnemigos[i].y, entorno)) {
-					pEnemigos[i] = null;
+				if(!Detector.estarEnEntorno(ionesEnemigos[i].x, ionesEnemigos[i].y, entorno)) {
+					ionesEnemigos[i] = null;
 				}
+			}
+			if(ionesEnemigos[i] ==  null) {
+				int enemigoElegido = (int) (Math.random() * enemigos.length); //elije un enemigo entre el 0 y la cantidad de enenemigos
+				while(enemigos[enemigoElegido] == null) {
+					enemigoElegido = (int) (Math.random() * enemigos.length); //elije un enemigo entre el 0 y la cantidad de enenemigos
+				}
+				ionesEnemigos[i] = new ProyectilEnemigo(entorno,3,5,enemigos[enemigoElegido].x,enemigos[enemigoElegido].y);
 			}
 		}
 		
@@ -182,12 +174,17 @@ public class Juego extends InterfaceJuego {
 			if(debugMode == true)
 				asteroides[i].dibujarCaja();
 			
-			//Si enemigo colisiona con el jugador
-			if (nave != null  && asteroides[i] != null && 
+			//Si un asteroide colisiona con el jugador
+			if(nave != null  && asteroides[i] != null && 
 				Detector.colisiona(nave.x,nave.y,asteroides[i].x,asteroides[i].y,rangoColision/2)) {
 				System.out.println("colision con asteroide!!!!");
 				nave=null;
 			}
+			//Si un proyectil de un jugador colisiona con un asteroide
+			if(proyectilNave != null && asteroides[i] != null && Detector.colisiona(proyectilNave.x,proyectilNave.y,asteroides[i].x,asteroides[i].y,rangoColision/2)) {
+				proyectilNave=null;
+			}
+			//Si un asteoride ya no es visible verticalmente en la pantalla
 			if(!Detector.estarEnEntorno(asteroides[i].x,asteroides[i].y,entorno)) {
 				asteroides[i].y = 0;
 			}
@@ -221,9 +218,9 @@ public class Juego extends InterfaceJuego {
 				}
 				//En caso de colisiones con un proyectil de jugador
 				
-				if(nave != null && pNave != null && enemigos[i]!=null && Detector.colisiona(enemigos[i].x,enemigos[i].y,pNave.x,pNave.y,rangoColision/2)) {
+				if(nave != null && proyectilNave != null && enemigos[i]!=null && Detector.colisiona(enemigos[i].x,enemigos[i].y,proyectilNave.x,proyectilNave.y,rangoColision/2)) {
 					enemigos[i]=null;
-					pNave=null;
+					proyectilNave=null;
 					System.out.println("Colision proyectil");
 				}
 				
@@ -237,7 +234,7 @@ public class Juego extends InterfaceJuego {
 				}
 				//Si enemigo colisiona con el jugador
 				if (nave != null  && enemigos[i] != null &&
-					Detector.colisiona(nave.x,nave.y,enemigos[i].x,enemigos[i].y,10)) {
+					Detector.colisiona(nave.x,nave.y,enemigos[i].x,enemigos[i].y,rangoColision)) {
 					System.out.println("colision con enemigo!!!!");
 					nave=null;
 				}
@@ -262,15 +259,22 @@ public class Juego extends InterfaceJuego {
 				entorno.escribirTexto("contador:" + contador, 500, 250);
 			}
 			
+			//Veo si queda alguna Enemigo vivo
+			boolean sinEnemigos = true; //asume que no hay enemigos hasta que se demuestre lo contrario
+			for(int i=0;i<enemigos.length;i++) {
+				if(enemigos[i] != null) {
+					sinEnemigos = false;
+				}
+			}
+			if(sinEnemigos) {
+				entorno.dibujarImagen(ganaste,400, 300, 0.0);
+			}
+			
 		}else if (nave == null) {
 			entorno.dibujarImagen(gameover,400, 300, 0.0);
 			// Herramientas.cargarSonido("perdiste.wav").start();
 			
-		}
-		else if(nave != null && enemigos == null) {
-			entorno.dibujarImagen(ganaste,400, 300, 0.0);
-		}
-			
+		}	
 	
 	}
 	
