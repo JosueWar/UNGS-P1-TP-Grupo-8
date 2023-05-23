@@ -1,6 +1,5 @@
 package juego;
 
-import java.awt.Color;
 import java.awt.Image;
 import entorno.Entorno;
 import entorno.Herramientas;
@@ -54,11 +53,6 @@ public class Enemigo {
 		{
 			this.angulo=3 * Math.PI/4;
 		}
-	}
-	
-	public void dibujarCaja() {
-		Color color = new Color(255, 102, 102);
-		entorno.dibujarRectangulo(x, y, img.getWidth(entorno)*escala, img.getHeight(entorno)*escala, 0, color);
 	}
 
 

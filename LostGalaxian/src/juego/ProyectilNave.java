@@ -1,6 +1,5 @@
 package juego;
 
-import java.awt.Color;
 import java.awt.Image;
 
 import entorno.Entorno;
@@ -15,8 +14,7 @@ public class ProyectilNave {
 	Entorno entorno;
 	
 	public ProyectilNave(Entorno ent, double esc, double vel, double inicioX, double inicioY) {
-		
-		
+
 		//Si es de jugador
 		this.entorno=ent;
 		this.escala=esc;

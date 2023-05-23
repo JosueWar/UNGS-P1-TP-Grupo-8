@@ -1,6 +1,5 @@
 package juego;
 
-import java.util.Random;
 public class Extras {
 	public static double generarRandomDouble(double valorMinimo, double valorMaximo) {
 		
