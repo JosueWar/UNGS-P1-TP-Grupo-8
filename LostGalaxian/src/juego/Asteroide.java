@@ -24,7 +24,7 @@ public class Asteroide
 		this.y=-Math.random()*entorno.alto()*0.2;
 		
 		img = Herramientas.cargarImagen("asteroide.png");
-		angulo=Utiles.generarRandomDouble(0,Math.PI);
+		angulo=Utiles.generarRandomDouble(0,Math.PI/2);
 		velocidad=Utiles.generarRandomDouble(1,5);
 		 
 	}

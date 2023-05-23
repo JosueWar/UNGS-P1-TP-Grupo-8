@@ -15,15 +15,21 @@ public class Juego extends InterfaceJuego {
 	
 	Nave nave;
 	ProyectilNave proyectilNave;
+	boolean faseJefeFinalGanado;
 	int puntaje;
 	int velocidadEnemigos;
 	int nivel = 1;
 	
 	
 	
+	
 	Asteroide[] asteroides;
+	
 	Enemigo[] enemigos;
 	ProyectilEnemigo[] ionesEnemigos;
+	
+	Enemigo jefeFinal;
+	ProyectilEnemigo[] ionesJefeFinal;
 	
 	ItemVida extraVida;
 	ItemPuntaje extraPuntaje;
@@ -34,11 +40,15 @@ public class Juego extends InterfaceJuego {
 
 	// Variables y métodos propios de cada grupo
 	double rangoColision = 50; //rango de colision general entre objetos, reducido a la mitad o aumentado dependiendo del tamaño del objeto
+	
 	int cantidadEnemigos = 4;
 	int cantidadAsteroides = 5;
-	int cantidadIonesEnPantalla = 3;
+	int cantidadIonesEnPantalla = 2;
+	int cantidadIonesJefeFinalEnPantalla = 5;
+	
 	int dañoEnemigos = 20;
 	int dañoAsteroides = 15;
+	
 	//Pantalla
 	int ancho = 800;
 	int alto = 600;
@@ -54,6 +64,7 @@ public class Juego extends InterfaceJuego {
 		
 	    gameover=Herramientas.cargarImagen("gameover.png");
 	    ganaste=Herramientas.cargarImagen("ganaste.png");
+	    faseJefeFinalGanado=false;
 	    puntaje=0;
 	    velocidadEnemigos=3;
 		anguloFondo= 0;
@@ -77,7 +88,9 @@ public class Juego extends InterfaceJuego {
 		}
 		
 		
+		
 		ionesEnemigos = new ProyectilEnemigo[cantidadIonesEnPantalla]; //Limite de cantidad de iones instanciados en pantalla 
+		ionesJefeFinal = new ProyectilEnemigo[cantidadIonesJefeFinalEnPantalla]; //Limite de cantidad de iones instanciados en pantalla 
 		
 		// ...
 
@@ -162,6 +175,31 @@ public class Juego extends InterfaceJuego {
 				}
 				ionesEnemigos[i] = new ProyectilEnemigo(entorno,3,5,enemigos[enemigoElegido].x,enemigos[enemigoElegido].y);
 			}
+		}
+		
+		//Proyectil Jefe Final
+		if(jefeFinal!=null) {
+		for(int i=0;i < ionesJefeFinal.length;i++) {
+			if(ionesJefeFinal[i] !=  null) {
+				//Accionar proyectiles
+				ionesJefeFinal[i].dibujar();
+				ionesJefeFinal[i].mover();
+				
+				//Si colisiona a un jugador
+				if(nave != null && Detector.colisiona(nave.x,nave.y,ionesJefeFinal[i].x,ionesJefeFinal[i].y,rangoColision/2)) {
+					System.out.println("Colision con iones!!!!");
+					ionesJefeFinal[i]=null;
+					nave.vida-=dañoEnemigos;
+				}
+				//Desaparecerlo si esta fuera del mapa y no fue eliminado si hubo una colision con jugador
+				if(ionesJefeFinal[i] !=  null && !Detector.estarEnEntorno(ionesJefeFinal[i].x, ionesJefeFinal[i].y, entorno)) {
+					ionesJefeFinal[i] = null;
+				}
+			}
+			if(ionesJefeFinal[i] ==  null) {
+				ionesJefeFinal[i] = new ProyectilEnemigo(entorno,3,5,jefeFinal.x,80+i*18);
+			}
+		}
 		}
 		
 		
@@ -249,11 +287,38 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 			//regenera enemigos luego de cierto tiempo si no se gano el juego aun
-			if(enemigos[i] == null &&(
+			if(enemigos[i] == null && jefeFinal == null && !faseJefeFinalGanado &&(
 			Utiles.segundosActuales() == 00 ||
 			Utiles.segundosActuales() == 30 )) {
 				enemigos[i] = new Enemigo(entorno, 0.2 ,3, 10); 
 			}
+			
+		}
+		
+		//JEFE FINAL
+		if(jefeFinal != null) {
+			jefeFinal.dibujar();
+			jefeFinal.moverSoloHorizontal();
+			
+			//En caso de colision con un proyectil de jugador
+			if(nave != null && proyectilNave != null && jefeFinal!=null && Detector.colisiona(jefeFinal.x,jefeFinal.y,proyectilNave.x,proyectilNave.y,rangoColision*4)) {
+				jefeFinal.vida-=3;
+				proyectilNave=null;
+				puntaje+=50;
+				System.out.println("Colision con proyectil!!!");
+			}
+			if(jefeFinal.vida<=0) {
+				jefeFinal=null;
+				faseJefeFinalGanado = true;
+			}
+			else {
+				//panel de vida Jefe
+				entorno.cambiarFont("Arial", 20, Color.white);
+				entorno.escribirTexto("JEFE FINAL vida: ", ancho/2-75, 50);
+				entorno.dibujarRectangulo(ancho/2, 70, 400, 20, 0, Color.red);
+				entorno.dibujarRectangulo(ancho/2, 70, jefeFinal.vida*4, 20, 0, Color.green);
+			}
+			
 			
 		}
 		
@@ -266,24 +331,42 @@ public class Juego extends InterfaceJuego {
 			nave.dibujarse();
 			
 			if(!hayEnemigos(enemigos)) {
-				entorno.dibujarImagen(ganaste,400, 300, 0.0);
-				//eliminar asteroides
-				for(int i=0;i<asteroides.length;i++) {
-					asteroides[i]=null;
+				
+				if(jefeFinal == null && !faseJefeFinalGanado) {
+					jefeFinal = new Enemigo(entorno, 1 ,2, 2);
 				}
-				//eliminar iones restantes ya que termino el juego
-				for(int i=0;i<ionesEnemigos.length;i++) {
-					ionesEnemigos[i]=null;
+				
+				if(jefeFinal == null && faseJefeFinalGanado) {
+					entorno.dibujarImagen(ganaste,400, 300, 0.0);
+					
+					entorno.cambiarFont("Arial", 20, Color.white);
+					entorno.escribirTexto("Puntaje Final: " + puntaje, ancho/2-75, alto-50);
+					entorno.escribirTexto("Nivel Alcanzado: " + nivel, ancho/2-75, alto-100);
+					//eliminar asteroides
+					for(int i=0;i<asteroides.length;i++) {
+						asteroides[i]=null;
+					}
+					//eliminar iones restantes ya que termino el juego
+					for(int i=0;i<ionesEnemigos.length;i++) {
+						ionesEnemigos[i]=null;
+					}
+					extraVida=null;
+					extraPuntaje=null;
 				}
 			}
-			if(Detector.colisiona(nave.x,nave.y,extraVida.x,extraVida.y,rangoColision/2)) {
-				extraVida=null;
-				nave.vida+=50;
+			if(extraVida != null) {
+				if(Detector.colisiona(nave.x,nave.y,extraVida.x,extraVida.y,rangoColision/2)) {
+					extraVida=null;
+					nave.vida+=50;
+				}
 			}
-			if(Detector.colisiona(nave.x,nave.y,extraPuntaje.x,extraPuntaje.y,rangoColision/2)) {
-				extraPuntaje=null;
-				puntaje+=50;
+			if(extraPuntaje != null) {
+				if(Detector.colisiona(nave.x,nave.y,extraPuntaje.x,extraPuntaje.y,rangoColision/2)) {
+					extraPuntaje=null;
+					puntaje+=50;
+				}
 			}
+			
 			
 			entorno.cambiarFont("Arial", 20, Color.white);
 			entorno.escribirTexto("Vida: " + nave.vida, ancho-200, 100);
@@ -295,7 +378,7 @@ public class Juego extends InterfaceJuego {
 			entorno.cambiarFont("Arial", 20, Color.white);
 			entorno.dibujarImagen(gameover, ancho/2, 300, 0.0);
 			entorno.escribirTexto("Puntaje Final: " + puntaje, ancho/2-75, alto-50);
-			entorno.escribirTexto("Nivel alcanzado: " + puntaje, ancho/2-75, alto-100);
+			entorno.escribirTexto("Nivel Alcanzado: " + nivel, ancho/2-75, alto-100);
 		}
 		
 		//NIVEL, se aumentara por cada cierta cantidad de puntaje
