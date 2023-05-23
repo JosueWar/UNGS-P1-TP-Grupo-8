@@ -13,7 +13,6 @@ public class Juego extends InterfaceJuego {
 	Image fondo;
 	Image gameover;
 	Image ganaste;
-	boolean debugMode;
 	
 	Nave nave;
 	ProyectilNave proyectilNave;
@@ -40,7 +39,6 @@ public class Juego extends InterfaceJuego {
 		entorno = new Entorno(this, "Lost Galaxian - Grupo 8 - v1", ancho, alto);
 		nave = new Nave(entorno, ancho/2, alto-40,0.2);
 		fondo=Herramientas.cargarImagen("fondo.gif");
-		debugMode = false;
 		
 		
 	    gameover=Herramientas.cargarImagen("gameover.png");
