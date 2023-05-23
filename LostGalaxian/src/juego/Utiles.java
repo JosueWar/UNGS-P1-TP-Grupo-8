@@ -27,5 +27,15 @@ public class Utiles {
         
         return segundos;
 	}
+	public static boolean hayEnemigos(Enemigo enemigos[]) {
+		//Veo si queda alguna Enemigo vivo
+		boolean sinEnemigos = false; //asume que no hay enemigos hasta que se demuestre que haya al menos uno
+		for(int i=0;i<enemigos.length;i++) {
+			if(enemigos[i] != null) {
+				sinEnemigos = true;
+			}
+		}
+		return sinEnemigos;
+	}
 	
 }

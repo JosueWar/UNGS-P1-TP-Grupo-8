@@ -168,7 +168,7 @@ public class Juego extends InterfaceJuego {
 					ionesEnemigos[i] = null;
 				}
 			}
-			if(ionesEnemigos[i] ==  null && hayEnemigos(enemigos)) {
+			if(ionesEnemigos[i] ==  null && Utiles.hayEnemigos(enemigos)) {
 				int enemigoElegido = Utiles.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
 				while(enemigos[enemigoElegido] == null) {
 					enemigoElegido = Utiles.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
@@ -330,7 +330,7 @@ public class Juego extends InterfaceJuego {
 		if (nave != null) {
 			nave.dibujarse();
 			
-			if(!hayEnemigos(enemigos)) {
+			if(!Utiles.hayEnemigos(enemigos)) {
 				
 				if(jefeFinal == null && !faseJefeFinalGanado) {
 					jefeFinal = new Enemigo(entorno, 1 ,2, 2);
@@ -415,16 +415,6 @@ public class Juego extends InterfaceJuego {
 	
 	}
 	
-	public boolean hayEnemigos(Enemigo enemigos[]) {
-		//Veo si queda alguna Enemigo vivo
-		boolean sinEnemigos = false; //asume que no hay enemigos hasta que se demuestre que haya al menos uno
-		for(int i=0;i<enemigos.length;i++) {
-			if(enemigos[i] != null) {
-				sinEnemigos = true;
-			}
-		}
-		return sinEnemigos;
-	}
 	
 
 	@SuppressWarnings("unused")
