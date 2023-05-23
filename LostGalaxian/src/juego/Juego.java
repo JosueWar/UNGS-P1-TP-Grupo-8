@@ -11,7 +11,6 @@ public class Juego extends InterfaceJuego {
 	Image fondo;
 	Image gameover;
 	Image ganaste;
-	int puntaje;
 	
 	Nave nave;
 	ProyectilNave proyectilNave;
@@ -26,6 +25,9 @@ public class Juego extends InterfaceJuego {
 
 	// Variables y métodos propios de cada grupo
 	double rangoColision = 50; //rango de colision general entre objetos, reducido a la mitad o aumentado dependiendo del tamaño del objeto
+	int cantidadEnemigos = 4;
+	int cantidadAsteroides = 5;
+	int cantidadIonesEnPantalla = 3;
 	//Pantalla
 	int ancho = 800;
 	int alto = 600;
@@ -47,19 +49,23 @@ public class Juego extends InterfaceJuego {
 		// Inicializar lo que haga falta para el juego
 		
 		//ASTEROIDES
-		asteroides = new Asteroide[4];
+		asteroides = new Asteroide[cantidadAsteroides];
+		
 		for(int i=0;i<4;i++) {
 			Asteroide a = new Asteroide(entorno, 0.5 ,Extras.generarRandomDouble(1,5));
 			asteroides[i]=a;
 		}
 		
+		
 		//ENEMIGOS
-		enemigos =new Enemigo[4];
+		
+		enemigos =new Enemigo[cantidadEnemigos];
 		for (int i=0; i < enemigos.length;i++) {
-			enemigos[i]=new Enemigo(entorno, 0.2 ,6, i); //crea a los enemigos uno por uno y le da una diferencia de altura por i
+			enemigos[i]=new Enemigo(entorno, 0.2 ,3, i); //crea a los enemigos uno por uno y le da una diferencia de altura por i
 		}
 		
-		ionesEnemigos = new ProyectilEnemigo[3]; //Limite de cantidad de iones instanciados en pantalla 
+		
+		ionesEnemigos = new ProyectilEnemigo[cantidadIonesEnPantalla]; //Limite de cantidad de iones instanciados en pantalla 
 		
 		// ...
 
@@ -122,7 +128,7 @@ public class Juego extends InterfaceJuego {
 					ionesEnemigos[i] = null;
 				}
 			}
-			if(ionesEnemigos[i] ==  null) {
+			if(ionesEnemigos[i] ==  null && hayEnemigos(enemigos)) {
 				int enemigoElegido = Extras.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
 				while(enemigos[enemigoElegido] == null) {
 					enemigoElegido = Extras.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
@@ -135,23 +141,26 @@ public class Juego extends InterfaceJuego {
 		
 		//ASTEROIDES
 		for(int i=0;i<asteroides.length;i++) {
-			asteroides[i].mover(entorno);
-			asteroides[i].dibujar(entorno);
+			if(asteroides[i] != null) {
+				asteroides[i].mover(entorno);
+				asteroides[i].dibujar(entorno);
 
-			//Si un asteroide colisiona con el jugador
-			if(nave != null  && asteroides[i] != null && 
-				Detector.colisiona(nave.x,nave.y,asteroides[i].x,asteroides[i].y,rangoColision/2)) {
-				System.out.println("Colision con asteroide!!!!");
-				nave=null;
+				//Si un asteroide colisiona con el jugador
+				if(nave != null  && asteroides[i] != null && 
+					Detector.colisiona(nave.x,nave.y,asteroides[i].x,asteroides[i].y,rangoColision/2)) {
+					System.out.println("Colision con asteroide!!!!");
+					nave=null;
+				}
+				//Si un proyectil de un jugador colisiona con un asteroide
+				if(proyectilNave != null && asteroides[i] != null && Detector.colisiona(proyectilNave.x,proyectilNave.y,asteroides[i].x,asteroides[i].y,rangoColision/2)) {
+					proyectilNave=null;
+				}
+				//Si un asteoride ya no es visible verticalmente en la pantalla
+				if(!Detector.estarEnEntorno(asteroides[i].x,asteroides[i].y,entorno)) {
+					asteroides[i].y = 0;
+				}
 			}
-			//Si un proyectil de un jugador colisiona con un asteroide
-			if(proyectilNave != null && asteroides[i] != null && Detector.colisiona(proyectilNave.x,proyectilNave.y,asteroides[i].x,asteroides[i].y,rangoColision/2)) {
-				proyectilNave=null;
-			}
-			//Si un asteoride ya no es visible verticalmente en la pantalla
-			if(!Detector.estarEnEntorno(asteroides[i].x,asteroides[i].y,entorno)) {
-				asteroides[i].y = 0;
-			}
+			
 		}
 		
 		
@@ -209,21 +218,34 @@ public class Juego extends InterfaceJuego {
 		if (nave != null) {
 			nave.dibujarse(entorno);
 			
-			//Veo si queda alguna Enemigo vivo
-			boolean sinEnemigos = true; //asume que no hay enemigos hasta que se demuestre lo contrario
-			for(int i=0;i<enemigos.length;i++) {
-				if(enemigos[i] != null) {
-					sinEnemigos = false;
+			if(!hayEnemigos(enemigos)) {
+				entorno.dibujarImagen(ganaste,400, 300, 0.0);
+				//eliminar asteroides
+				for(int i=0;i<asteroides.length;i++) {
+					asteroides[i]=null;
+				}
+				//eliminar iones restantes ya que termino el juego
+				for(int i=0;i<ionesEnemigos.length;i++) {
+					ionesEnemigos[i]=null;
 				}
 			}
-			if(sinEnemigos) {
-				entorno.dibujarImagen(ganaste,400, 300, 0.0);
-			}
+			
 			
 		}else if (nave == null) {
 			entorno.dibujarImagen(gameover,400, 300, 0.0);
 		}	
 	
+	}
+	
+	public boolean hayEnemigos(Enemigo enemigos[]) {
+		//Veo si queda alguna Enemigo vivo
+		boolean sinEnemigos = false; //asume que no hay enemigos hasta que se demuestre que haya al menos uno
+		for(int i=0;i<enemigos.length;i++) {
+			if(enemigos[i] != null) {
+				sinEnemigos = true;
+			}
+		}
+		return sinEnemigos;
 	}
 	
 
