@@ -10,32 +10,28 @@ import entorno.Herramientas;
 public class Asteroide
 {
 	// Variables de instancia
-	double x, y, angulo, escala,velocidad,ancho,alto;
+	double x, y, angulo, escala,velocidad;
 	Image img;
-	Entorno e;
+	Entorno entorno;
 	
 	public Asteroide(Entorno ent, double esc, double vel) 
 	{
-		this.e=ent;
+		this.entorno=ent;
 		this.escala=esc;
 		this.velocidad=vel;
-		this.x=Math.random()*e.ancho();
-		this.y=-Math.random()*e.alto()*0.2;
+		this.x=Math.random()*entorno.ancho();
+		this.y=-Math.random()*entorno.alto()*0.2;
 		
 		img = Herramientas.cargarImagen("asteroide.png");
 		//Se tuvo que tener cuenta en radianes y la direccion de los asteroides
 		angulo=Extras.generarRandomDouble(0,3.14);
 		velocidad=Extras.generarRandomDouble(1,5);
-		
-		ancho=img.getWidth(e)*escala;
-		alto=img.getHeight(e)*escala;
-		
 		 
 	}
 	public void crearAsteroides() {
 	Asteroide[] asteroides = new Asteroide[4];
 	for(int i=0;i<4;i++) {
-		Asteroide a = new Asteroide(e, 0.5 ,Extras.generarRandomDouble(1,5));
+		Asteroide a = new Asteroide(entorno, 0.5 ,Extras.generarRandomDouble(1,5));
 		asteroides[i]=a;
 	}
 	}
@@ -75,11 +71,6 @@ public class Asteroide
 			this.angulo=3 * Math.PI/4;
 		}
 	}
-	public void dibujarCaja() {
-		Color color = new Color(255, 229, 204);
-		e.dibujarRectangulo(x, y, img.getWidth(e)*escala, img.getHeight(e)*escala, 0, color);
-	}
-
    
 }
 

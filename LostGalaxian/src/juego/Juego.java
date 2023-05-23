@@ -23,20 +23,12 @@ public class Juego extends InterfaceJuego {
 	Enemigo[] enemigos;
 	ProyectilEnemigo[] ionesEnemigos;
 
-	int contador;
-	
-
 	double anguloFondo;
 	double escalaFondo;
 	double incremento;
 
 	// Variables y métodos propios de cada grupo
-
-	//Elegir nivel y otros
-	double nivel = 1;
-	double dificultad =  nivel * Extras.generarRandomDouble(3, 6);
-	double rangoColision = 50;
-	
+	double rangoColision = 50; //rango de colision general entre objetos, reducido a la mitad o aumentado dependiendo del tamaño del objeto
 	//Pantalla
 	int ancho = 800;
 	int alto = 600;
@@ -69,11 +61,10 @@ public class Juego extends InterfaceJuego {
 		//ENEMIGOS
 		enemigos =new Enemigo[4];
 		for (int i=0; i < enemigos.length;i++) {
-			enemigos[i]=new Enemigo(entorno, 0.2 ,6);
+			enemigos[i]=new Enemigo(entorno, 0.2 ,6, i); //crea a los enemigos uno por uno y le da una diferencia de altura por i
 		}
-		contador=0;
 		
-		ionesEnemigos = new ProyectilEnemigo[4]; //Se eligio 4 como limite de cantidad de iones instanciados en pantalla 
+		ionesEnemigos = new ProyectilEnemigo[3]; //Limite de cantidad de iones instanciados en pantalla 
 		
 		// ...
 
@@ -81,12 +72,6 @@ public class Juego extends InterfaceJuego {
 		entorno.iniciar();
 	}
 
-	/**
-	 * Durante el juego, el método tick() será ejecutado en cada instante y por lo
-	 * tanto es el método más importante de esta clase. Aquí se debe actualizar el
-	 * estado interno del juego para simular el paso del tiempo (ver el enunciado
-	 * del TP para mayor detalle).
-	 */
 	public void tick() {
 		
 		
@@ -107,13 +92,6 @@ public class Juego extends InterfaceJuego {
 				proyectilNave= new ProyectilNave(entorno,3,5,nave.x,nave.y);
 			}
 			
-			if (entorno.sePresiono('m')) {
-				debugMode=true;
-			}
-			if (entorno.sePresiono('n')) {
-				debugMode=false;
-			}
-			
 		}
 		
 		
@@ -123,11 +101,7 @@ public class Juego extends InterfaceJuego {
 		if(proyectilNave != null){
 			proyectilNave.dibujar();
 			proyectilNave.mover();
-			
-			//debugMode
-			if(debugMode == true)
-				proyectilNave.dibujarCaja();
-			
+
 			//Desaparecerlo si esta fuera del mapa
 			if(!Detector.estarEnEntorno(proyectilNave.x, proyectilNave.y, entorno)) {
 				proyectilNave=null;
@@ -142,11 +116,9 @@ public class Juego extends InterfaceJuego {
 				ionesEnemigos[i].dibujar();
 				ionesEnemigos[i].mover();
 				
-				//Colisiones
-				
 				//Si colisiona a un jugador
 				if(nave != null && Detector.colisiona(nave.x,nave.y,ionesEnemigos[i].x,ionesEnemigos[i].y,rangoColision/2)) {
-					System.out.println("colision con iones!!!!");
+					System.out.println("Colision con iones!!!!");
 					nave=null;
 				}
 				
@@ -156,9 +128,9 @@ public class Juego extends InterfaceJuego {
 				}
 			}
 			if(ionesEnemigos[i] ==  null) {
-				int enemigoElegido = (int) (Math.random() * enemigos.length); //elije un enemigo entre el 0 y la cantidad de enenemigos
+				int enemigoElegido = Extras.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
 				while(enemigos[enemigoElegido] == null) {
-					enemigoElegido = (int) (Math.random() * enemigos.length); //elije un enemigo entre el 0 y la cantidad de enenemigos
+					enemigoElegido = Extras.generarRandom(0, enemigos.length - 1); //elije un enemigo entre el 0 y la cantidad de enenemigos
 				}
 				ionesEnemigos[i] = new ProyectilEnemigo(entorno,3,5,enemigos[enemigoElegido].x,enemigos[enemigoElegido].y);
 			}
@@ -170,14 +142,11 @@ public class Juego extends InterfaceJuego {
 		for(int i=0;i<asteroides.length;i++) {
 			asteroides[i].mover(entorno);
 			asteroides[i].dibujar(entorno);
-			//debug mode
-			if(debugMode == true)
-				asteroides[i].dibujarCaja();
-			
+
 			//Si un asteroide colisiona con el jugador
 			if(nave != null  && asteroides[i] != null && 
 				Detector.colisiona(nave.x,nave.y,asteroides[i].x,asteroides[i].y,rangoColision/2)) {
-				System.out.println("colision con asteroide!!!!");
+				System.out.println("Colision con asteroide!!!!");
 				nave=null;
 			}
 			//Si un proyectil de un jugador colisiona con un asteroide
@@ -196,10 +165,6 @@ public class Juego extends InterfaceJuego {
 			if(enemigos[i] != null) {
 				enemigos[i].dibujar();
 				enemigos[i].mover();
-				//debugMode
-				if(debugMode == true) {
-					enemigos[i].dibujarCaja();
-				}
 				
 				//Regresa hacia arriba si bajo demasiado la nave
 				if(!Detector.estarEnEntorno(enemigos[i].x,enemigos[i].y,entorno)) {
@@ -216,12 +181,12 @@ public class Juego extends InterfaceJuego {
 						enemigos[j].cambiarAngulo();
 					}
 				}
-				//En caso de colisiones con un proyectil de jugador
+				//En caso de colision con un proyectil de jugador
 				
 				if(nave != null && proyectilNave != null && enemigos[i]!=null && Detector.colisiona(enemigos[i].x,enemigos[i].y,proyectilNave.x,proyectilNave.y,rangoColision/2)) {
 					enemigos[i]=null;
 					proyectilNave=null;
-					System.out.println("Colision proyectil");
+					System.out.println("Colision con proyectil!!!");
 				}
 				
 				
@@ -235,7 +200,7 @@ public class Juego extends InterfaceJuego {
 				//Si enemigo colisiona con el jugador
 				if (nave != null  && enemigos[i] != null &&
 					Detector.colisiona(nave.x,nave.y,enemigos[i].x,enemigos[i].y,rangoColision)) {
-					System.out.println("colision con enemigo!!!!");
+					System.out.println("Colision con enemigo!!!!");
 					nave=null;
 				}
 				
@@ -248,16 +213,6 @@ public class Juego extends InterfaceJuego {
 		
 		if (nave != null) {
 			nave.dibujarse(entorno);
-			
-			//debug mode
-			if(debugMode == true) {
-				nave.dibujarCaja();
-				entorno.cambiarFont("Arial", 20, Color.white);
-				entorno.escribirTexto("El angulo es: " + nave.angulo, 500, 100);
-				entorno.escribirTexto("posicion en x:" + nave.x, 500, 150);
-				entorno.escribirTexto("posicion en y:" + nave.y, 500, 200);
-				entorno.escribirTexto("contador:" + contador, 500, 250);
-			}
 			
 			//Veo si queda alguna Enemigo vivo
 			boolean sinEnemigos = true; //asume que no hay enemigos hasta que se demuestre lo contrario
@@ -272,8 +227,6 @@ public class Juego extends InterfaceJuego {
 			
 		}else if (nave == null) {
 			entorno.dibujarImagen(gameover,400, 300, 0.0);
-			// Herramientas.cargarSonido("perdiste.wav").start();
-			
 		}	
 	
 	}
