@@ -11,6 +11,7 @@ public class Juego extends InterfaceJuego {
 	Image fondo;
 	Image gameover;
 	Image ganaste;
+	int puntaje;
 	
 	Nave nave;
 	ProyectilNave proyectilNave;
@@ -22,7 +23,6 @@ public class Juego extends InterfaceJuego {
 
 	double anguloFondo;
 	double escalaFondo;
-	double incremento;
 
 	// Variables y métodos propios de cada grupo
 	double rangoColision = 50; //rango de colision general entre objetos, reducido a la mitad o aumentado dependiendo del tamaño del objeto
@@ -43,7 +43,6 @@ public class Juego extends InterfaceJuego {
 	    ganaste=Herramientas.cargarImagen("ganaste.png");
 		anguloFondo= 0;
 		escalaFondo=1.8;
-		incremento=0;
 		
 		// Inicializar lo que haga falta para el juego
 		
