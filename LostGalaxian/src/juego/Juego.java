@@ -301,7 +301,7 @@ public class Juego extends InterfaceJuego {
 			jefeFinal.moverSoloHorizontal();
 			
 			//En caso de colision con un proyectil de jugador
-			if(nave != null && proyectilNave != null && jefeFinal!=null && Detector.colisiona(jefeFinal.x,jefeFinal.y,proyectilNave.x,proyectilNave.y,rangoColision*4)) {
+			if(nave != null && proyectilNave != null && jefeFinal!=null && Detector.colisiona(jefeFinal.x,jefeFinal.y,proyectilNave.x,proyectilNave.y,rangoColision*2.7)) {
 				jefeFinal.vida-=3;
 				proyectilNave=null;
 				puntaje+=50;
